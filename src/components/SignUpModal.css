@@ -1,0 +1,207 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 30, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  width: 500px;
+  max-width: 90%;
+  border-radius: 12px;
+  padding: 35px 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: #ff3333;
+}
+
+.modal-title {
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.modal-divider {
+  height: 3px;
+  background-color: #006600;
+  width: 60px;
+  margin: 0 auto 25px auto;
+  border-radius: 2px;
+}
+
+/* Form Layout */
+/* Form Layout - Using CSS Grid for perfect vertical alignment */
+.signup-form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Divides form into 4 equal columns */
+  gap: 15px 15px; /* row gap, column gap */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  grid-column: span 4;
+}
+
+.half-width {
+  grid-column: span 2;
+}
+
+.quarter-width {
+  grid-column: span 1;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%; /* Ensures inputs stretch to fill their grid cells */
+}
+
+.form-input:focus {
+  border-color: #006600;
+  box-shadow: 0 0 0 3px rgba(0, 102, 0, 0.1);
+}
+
+.select-input {
+  cursor: pointer;
+  background-color: white;
+}
+
+/* Modal Student Number styling */
+.modal-num-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Aligns boxes to the left edge of the form */
+  gap: 8px;
+}
+
+.modal-box-group {
+  display: flex;
+}
+
+.modal-digit-box {
+  width: 40px;
+  height: 50px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-right: none;
+  outline: none;
+}
+
+.modal-digit-box:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.modal-digit-box:last-child {
+  border-right: 1px solid #ccc;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.modal-digit-box:focus {
+  border: 2px solid #006600;
+  background-color: #f0f8ff;
+  z-index: 2; /* brings border above adjacent boxes */
+}
+
+.modal-dash {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #666;
+}
+
+/* Button & Links */
+.submit-btn {
+  background-color: #006600;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #008800;
+}
+
+.login-link-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+.login-link {
+  color: #006600;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,317 @@
+.visit-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.visit-content {
+  background-color: #f9f9f9;
+  width: 1200px; /* Made very wide */
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 20px;
+  padding: 15px 40px; /* Reduced vertical padding */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Green Header */
+.visit-header {
+  background-color: #1b5e20;
+  border-radius: 12px;
+  padding: 15px 25px; /* Reduced padding */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+.visit-header-icon {
+  background-color: rgba(255, 255, 255, 0.2);
+  height: 40px; /* Reduced size */
+  width: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visit-header-icon svg {
+  height: 24px; /* Reduced size */
+  width: 24px;
+}
+
+.visit-header-subtitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.visit-header-title {
+  font-size: 2rem; /* Increased size */
+  margin: 0;
+}
+
+/* Info Bar */
+.visit-info-bar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 20px; /* Reduced padding */
+  margin-bottom: 10px; /* Reduced margin */
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem; /* Reduced slightly */
+  color: #333;
+}
+
+.info-hash {
+  color: #888;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.info-divider {
+  width: 1px;
+  height: 24px;
+  background-color: #e0e0e0;
+}
+
+.info-select {
+  border: none;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 6px 12px; /* Reduced padding */
+  border-radius: 6px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.section-select {
+  background-color: #f5f5f5;
+  color: #555;
+}
+
+.time-item {
+  margin-left: auto;
+  color: #555;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+/* Form Fields */
+.visit-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.95rem; /* Reduced font size */
+  font-weight: 600;
+  color: #444;
+}
+
+.form-group label span {
+  font-weight: 400;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.visit-input,
+.visit-textarea {
+  padding: 10px 15px; /* Reduced padding */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem; /* Reduced font size */
+  color: #333;
+  outline: none;
+  background-color: white;
+}
+
+/* Custom Dropdown Styling */
+.custom-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 5px;
+  padding: 5px 0;
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.custom-dropdown-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.custom-dropdown-item:hover {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+
+.custom-dropdown-empty {
+  padding: 10px 15px;
+  color: #888;
+  font-style: italic;
+  text-align: center;
+}
+
+.visit-textarea {
+  resize: none;
+  height: 60px; /* Reduced height from 100px */
+  font-family: inherit;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: -3px;
+}
+
+/* Signature Pad */
+.signature-group {
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+.signature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clear-sig-btn {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.canvas-container {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  overflow: hidden;
+}
+
+.canvas-container::after {
+  content: "";
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
+  border-bottom: 2px dashed black;
+  pointer-events: none; /* Allows drawing through the overlay */
+}
+
+.signature-canvas {
+  width: 100%;
+  height: 160px;
+  cursor: crosshair;
+  touch-action: none; /* Prevents scrolling on touch screens while signing */
+}
+
+/* Footer & Buttons */
+.visit-footer-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 5px 0 10px 0;
+}
+
+.visit-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visit-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.btn-outline:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+}
+
+.submit-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.submit-note {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.btn-solid {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.btn-solid:hover {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+  border-color: #1b5e20;
+}
