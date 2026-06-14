@@ -134,21 +134,53 @@
 }
 
 .stat-card {
-  background: var(--brand-800);
   border-radius: var(--radius-lg);
   padding: 20px 22px;
   display: flex;
   align-items: center;
   gap: 16px;
-  color: var(--white);
   box-shadow: var(--shadow-sm);
+}
+
+/* Primary variant — full brand green (Students Consulted) */
+.stat-card--primary {
+  background: var(--brand-800);
+  color: var(--white);
+}
+
+.stat-card--primary .stat-icon {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.stat-card--primary .stat-label {
+  opacity: 0.8;
+}
+
+/* Secondary variant — light green tint (Today / This Week) */
+.stat-card--secondary {
+  background: var(--brand-50);
+  color: var(--brand-900);
+  border: 1px solid var(--brand-200);
+}
+
+.stat-card--secondary .stat-icon {
+  background: var(--brand-100);
+  color: var(--brand-800);
+}
+
+.stat-card--secondary .stat-label {
+  color: var(--brand-700);
+  opacity: 1;
+}
+
+.stat-card--secondary .stat-value {
+  color: var(--brand-900);
 }
 
 .stat-icon {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,7 +196,6 @@
 .stat-label {
   font-size: 12px;
   font-weight: 500;
-  opacity: 0.8;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -174,6 +205,7 @@
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
+  color: inherit;
 }
 
 /* ─── Filter toolbar ───────────────────────────────────────────────────────── */
@@ -262,23 +294,7 @@
   color: var(--neutral-500);
 }
 
-/* ─── AG Grid container ────────────────────────────────────────────────────── */
-.grid-container {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--neutral-200);
-  box-shadow: var(--shadow-sm);
-  flex: 1;
-  min-height: 250px;
-}
-
-/* ─── Footer actions ───────────────────────────────────────────────────────── */
-.footer-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
+/* ─── Generate Report button (now inside toolbar) ──────────────────────────── */
 .btn-report {
   display: inline-flex;
   align-items: center;
@@ -287,14 +303,16 @@
   color: var(--white);
   border: none;
   border-radius: var(--radius-md);
-  padding: 10px 22px;
-  font-size: 14px;
+  padding: 9px 18px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition:
     background 0.15s,
     transform 0.1s;
   box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .btn-report:hover {
@@ -305,21 +323,199 @@
   transform: scale(0.98);
 }
 
-/* ─── AG Grid overrides (light mode polish) ────────────────────────────────── */
+/* ─── AG Grid container ────────────────────────────────────────────────────── */
+.grid-container {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--neutral-200);
+  box-shadow: var(--shadow-sm);
+  flex: 1;
+  min-height: 250px;
+  cursor: pointer;
+}
 
-/* Floating filter row – keep it compact */
+/* ─── AG Grid overrides ────────────────────────────────────────────────────── */
 .ag-floating-filter-input {
   height: 28px !important;
   font-size: 12px !important;
 }
 
-/* Pagination bar */
 .ag-paging-panel {
   border-top: 1px solid var(--neutral-200) !important;
   font-size: 12px !important;
   color: var(--neutral-700) !important;
   padding: 0 16px !important;
   height: 44px !important;
+}
+
+/* Row hover hint that rows are clickable */
+.ag-row:hover {
+  cursor: pointer;
+}
+
+/* ─── Detail panel ─────────────────────────────────────────────────────────── */
+.panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 24, 40, 0.25);
+  z-index: 200;
+  animation: fadeIn 0.15s ease;
+}
+
+.detail-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 360px;
+  background: var(--white);
+  box-shadow: -4px 0 24px rgba(16, 24, 40, 0.12);
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.2s ease;
+  overflow-y: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--neutral-200);
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  z-index: 1;
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--neutral-900);
+}
+
+.panel-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--neutral-500);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.panel-close:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.panel-student {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.panel-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--brand-100);
+  color: var(--brand-800);
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.panel-student-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--neutral-900);
+  line-height: 1.3;
+}
+
+.panel-student-meta {
+  font-size: 12px;
+  color: var(--neutral-500);
+  margin-top: 3px;
+}
+
+.panel-fields {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.panel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.panel-field:last-child {
+  border-bottom: none;
+}
+
+.panel-field dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--neutral-500);
+}
+
+.panel-field dt svg {
+  flex-shrink: 0;
+  color: var(--brand-600);
+}
+
+.panel-field dd {
+  font-size: 13.5px;
+  color: var(--neutral-900);
+  font-weight: 500;
+  padding-left: 20px;
+}
+
+.panel-message {
+  font-weight: 400 !important;
+  line-height: 1.55;
+  color: var(--neutral-700) !important;
 }
 
 /* ─── Responsive ───────────────────────────────────────────────────────────── */
@@ -335,5 +531,9 @@
   .date-range {
     min-width: 0;
     flex-wrap: wrap;
+  }
+
+  .detail-panel {
+    width: 100%;
   }
 }

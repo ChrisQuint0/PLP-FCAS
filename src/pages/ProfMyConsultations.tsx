@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
 import {
@@ -8,6 +8,8 @@ import {
   GridReadyEvent,
   themeQuartz,
   RowSelectionOptions,
+  RowClickedEvent,
+  ValueFormatterParams,
 } from "ag-grid-community";
 import {
   BookOpen,
@@ -18,13 +20,16 @@ import {
   Download,
   ChevronDown,
   Clock,
+  X,
+  Hash,
+  Tag,
+  MessageSquare,
+  Timer,
 } from "lucide-react";
 import "./ProfMyConsultations.css";
 
-// ─── Register AG Grid modules once (works offline — bundled via npm) ──────────
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-// ─── Light-mode AG Grid theme via Theming API (v33+) ─────────────────────────
 const lightTheme = themeQuartz.withParams({
   accentColor: "#1a6b3c",
   headerBackgroundColor: "#1a6b3c",
@@ -50,12 +55,48 @@ interface ConsultationRow {
   section: string;
   reason: string;
   message: string;
-  date: string;
+  date: string; // ISO: "2025-06-10"
   timeIn: string;
   timeOut: string;
+  durationMin: number;
 }
 
-// ─── Dummy data ────────────────────────────────────────────────────────────────
+// ─── Helpers ───────────────────────────────────────────────────────────────────
+function parseTime(t: string): number {
+  // "10:28 AM" → minutes since midnight
+  const [hm, period] = t.split(" ");
+  let [h, m] = hm.split(":").map(Number);
+  if (period === "PM" && h !== 12) h += 12;
+  if (period === "AM" && h === 12) h = 0;
+  return h * 60 + m;
+}
+
+function calcDuration(timeIn: string, timeOut: string): number {
+  return parseTime(timeOut) - parseTime(timeIn);
+}
+
+function formatDisplayDate(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function isoToday(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function isoWeekStart(): string {
+  const d = new Date();
+  const day = d.getDay(); // 0 = Sun
+  d.setDate(d.getDate() - day);
+  return d.toISOString().slice(0, 10);
+}
+
+// ─── Data (dates in ISO 8601) ──────────────────────────────────────────────────
 const DUMMY_DATA: ConsultationRow[] = [
   {
     studentNumber: "24-00647",
@@ -63,9 +104,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT2D",
     reason: "Academic Guidance",
     message: "Final examination",
-    date: "June 10, 2025",
+    date: "2025-06-10",
     timeIn: "10:28 AM",
     timeOut: "10:45 AM",
+    durationMin: calcDuration("10:28 AM", "10:45 AM"),
   },
   {
     studentNumber: "24-00710",
@@ -73,9 +115,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSCS2A",
     reason: "Academic Guidance",
     message: "Final exam system presentation",
-    date: "June 04, 2025",
+    date: "2025-06-04",
     timeIn: "12:37 PM",
     timeOut: "12:55 PM",
+    durationMin: calcDuration("12:37 PM", "12:55 PM"),
   },
   {
     studentNumber: "22-00610",
@@ -83,9 +126,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT4D",
     reason: "Others (Specify the details)",
     message: "Quiz 2 clarification",
-    date: "May 30, 2025",
+    date: "2025-05-30",
     timeIn: "11:10 AM",
     timeOut: "11:25 AM",
+    durationMin: calcDuration("11:10 AM", "11:25 AM"),
   },
   {
     studentNumber: "22-00598",
@@ -93,9 +137,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT4D",
     reason: "Others (Specify the details)",
     message: "Quiz 2 results query",
-    date: "May 30, 2025",
+    date: "2025-05-30",
     timeIn: "11:09 AM",
     timeOut: "11:20 AM",
+    durationMin: calcDuration("11:09 AM", "11:20 AM"),
   },
   {
     studentNumber: "22-00649",
@@ -103,9 +148,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT4D",
     reason: "Others (Specify the details)",
     message: "Taking quiz retake",
-    date: "May 30, 2025",
+    date: "2025-05-30",
     timeIn: "11:09 AM",
     timeOut: "11:30 AM",
+    durationMin: calcDuration("11:09 AM", "11:30 AM"),
   },
   {
     studentNumber: "22-00699",
@@ -113,9 +159,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT4D",
     reason: "Others (Specify the details)",
     message: "Quiz 2 missed submission",
-    date: "May 30, 2025",
+    date: "2025-05-30",
     timeIn: "11:09 AM",
     timeOut: "11:22 AM",
+    durationMin: calcDuration("11:09 AM", "11:22 AM"),
   },
   {
     studentNumber: "22-01099",
@@ -123,9 +170,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT4D",
     reason: "Others (Specify the details)",
     message: "General consultation",
-    date: "May 28, 2025",
+    date: "2025-05-28",
     timeIn: "11:36 AM",
     timeOut: "11:50 AM",
+    durationMin: calcDuration("11:36 AM", "11:50 AM"),
   },
   {
     studentNumber: "23-00331",
@@ -133,9 +181,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT3E",
     reason: "Others (Specify the details)",
     message: "Interview consultation",
-    date: "April 28, 2025",
+    date: "2025-04-28",
     timeIn: "07:14 PM",
     timeOut: "07:30 PM",
+    durationMin: calcDuration("07:14 PM", "07:30 PM"),
   },
   {
     studentNumber: "21-00482",
@@ -143,9 +192,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSCS3B",
     reason: "Academic Guidance",
     message: "Thesis title approval",
-    date: "April 15, 2025",
+    date: "2025-04-15",
     timeIn: "09:00 AM",
     timeOut: "09:40 AM",
+    durationMin: calcDuration("09:00 AM", "09:40 AM"),
   },
   {
     studentNumber: "23-00890",
@@ -153,9 +203,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT2A",
     reason: "Academic Guidance",
     message: "Grade inquiry for midterms",
-    date: "March 22, 2025",
+    date: "2025-03-22",
     timeIn: "02:00 PM",
     timeOut: "02:20 PM",
+    durationMin: calcDuration("02:00 PM", "02:20 PM"),
   },
   {
     studentNumber: "22-00145",
@@ -163,9 +214,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSIT3C",
     reason: "Project Review",
     message: "Capstone prototype demo",
-    date: "March 10, 2025",
+    date: "2025-03-10",
     timeIn: "03:15 PM",
     timeOut: "04:00 PM",
+    durationMin: calcDuration("03:15 PM", "04:00 PM"),
   },
   {
     studentNumber: "21-00776",
@@ -173,9 +225,10 @@ const DUMMY_DATA: ConsultationRow[] = [
     section: "BSCS4A",
     reason: "Academic Guidance",
     message: "OJT requirements clarification",
-    date: "February 28, 2025",
+    date: "2025-02-28",
     timeIn: "10:00 AM",
     timeOut: "10:30 AM",
+    durationMin: calcDuration("10:00 AM", "10:30 AM"),
   },
 ];
 
@@ -184,13 +237,15 @@ function StatCard({
   icon,
   label,
   value,
+  variant = "primary",
 }: {
   icon: React.ReactNode;
   label: string;
   value: number | string;
+  variant?: "primary" | "secondary";
 }) {
   return (
-    <div className="stat-card">
+    <div className={`stat-card stat-card--${variant}`}>
       <div className="stat-icon" aria-hidden="true">
         {icon}
       </div>
@@ -202,27 +257,132 @@ function StatCard({
   );
 }
 
+// ─── Detail panel ──────────────────────────────────────────────────────────────
+function DetailPanel({
+  row,
+  onClose,
+}: {
+  row: ConsultationRow | null;
+  onClose: () => void;
+}) {
+  if (!row) return null;
+  return (
+    <>
+      <div className="panel-backdrop" onClick={onClose} aria-hidden="true" />
+      <aside
+        className="detail-panel"
+        role="dialog"
+        aria-label="Consultation details"
+      >
+        <div className="panel-header">
+          <h2 className="panel-title">Consultation Details</h2>
+          <button
+            className="panel-close"
+            onClick={onClose}
+            aria-label="Close details"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="panel-student">
+          <div className="panel-avatar" aria-hidden="true">
+            {row.studentName.charAt(0)}
+          </div>
+          <div>
+            <p className="panel-student-name">{row.studentName}</p>
+            <p className="panel-student-meta">
+              {row.studentNumber} · {row.section}
+            </p>
+          </div>
+        </div>
+
+        <dl className="panel-fields">
+          <div className="panel-field">
+            <dt>
+              <CalendarDays size={14} aria-hidden="true" />
+              Date
+            </dt>
+            <dd>{formatDisplayDate(row.date)}</dd>
+          </div>
+          <div className="panel-field">
+            <dt>
+              <Clock size={14} aria-hidden="true" />
+              Time
+            </dt>
+            <dd>
+              {row.timeIn} → {row.timeOut}
+            </dd>
+          </div>
+          <div className="panel-field">
+            <dt>
+              <Timer size={14} aria-hidden="true" />
+              Duration
+            </dt>
+            <dd>{row.durationMin} min</dd>
+          </div>
+          <div className="panel-field">
+            <dt>
+              <Tag size={14} aria-hidden="true" />
+              Reason
+            </dt>
+            <dd>{row.reason}</dd>
+          </div>
+          <div className="panel-field panel-field--full">
+            <dt>
+              <MessageSquare size={14} aria-hidden="true" />
+              Message / Details
+            </dt>
+            <dd className="panel-message">{row.message}</dd>
+          </div>
+          <div className="panel-field">
+            <dt>
+              <Hash size={14} aria-hidden="true" />
+              Student No.
+            </dt>
+            <dd>{row.studentNumber}</dd>
+          </div>
+        </dl>
+      </aside>
+    </>
+  );
+}
+
 // ─── Main page ─────────────────────────────────────────────────────────────────
 export default function ProfMyConsultations() {
   const navigate = useNavigate();
-  const [fromDate, setFromDate] = useState("2020-06-01");
-  const [toDate, setToDate] = useState("2026-06-11");
-  const [sectionFilter, setSectionFilter] = useState("all");
+  const today = isoToday();
+  const weekStart = isoWeekStart();
 
-  // Derive unique sections for the dropdown
+  const [fromDate, setFromDate] = useState("2020-06-01");
+  const [toDate, setToDate] = useState(today);
+  const [sectionFilter, setSectionFilter] = useState("all");
+  const [selectedRow, setSelectedRow] = useState<ConsultationRow | null>(null);
+
   const sections = useMemo(() => {
     const all = DUMMY_DATA.map((r) => r.section);
     return ["all", ...Array.from(new Set(all)).sort()];
   }, []);
 
-  // Filter rows based on the section dropdown
-  // (Date filtering is illustrative — with a real DB, pass to query instead)
+  // Live-filter by date range + section
   const rowData = useMemo(() => {
-    if (sectionFilter === "all") return DUMMY_DATA;
-    return DUMMY_DATA.filter((r) => r.section === sectionFilter);
-  }, [sectionFilter]);
+    return DUMMY_DATA.filter((r) => {
+      const inSection = sectionFilter === "all" || r.section === sectionFilter;
+      const inRange = r.date >= fromDate && r.date <= toDate;
+      return inSection && inRange;
+    });
+  }, [sectionFilter, fromDate, toDate]);
 
-  // Stats
+  // Stat counts (always computed against full data, not filtered view)
+  const countToday = useMemo(
+    () => DUMMY_DATA.filter((r) => r.date === today).length,
+    [today],
+  );
+  const countWeek = useMemo(
+    () =>
+      DUMMY_DATA.filter((r) => r.date >= weekStart && r.date <= today).length,
+    [weekStart, today],
+  );
   const totalStudents = DUMMY_DATA.length;
 
   // ─── Column definitions ─────────────────────────────────────────────────────
@@ -231,15 +391,16 @@ export default function ProfMyConsultations() {
       {
         headerName: "Student No.",
         field: "studentNumber",
-        width: 120,
+        width: 130,
         filter: "agTextColumnFilter",
         pinned: "left",
+        sort: null,
       },
       {
         headerName: "Student Name",
         field: "studentName",
         flex: 2,
-        minWidth: 180,
+        minWidth: 190,
         filter: "agTextColumnFilter",
       },
       {
@@ -252,8 +413,9 @@ export default function ProfMyConsultations() {
         headerName: "Reason",
         field: "reason",
         flex: 1.5,
-        minWidth: 160,
+        minWidth: 170,
         filter: "agTextColumnFilter",
+        tooltipField: "reason",
       },
       {
         headerName: "Message / Details",
@@ -261,24 +423,38 @@ export default function ProfMyConsultations() {
         flex: 2,
         minWidth: 180,
         filter: "agTextColumnFilter",
+        tooltipField: "message",
       },
       {
         headerName: "Date",
         field: "date",
-        width: 140,
+        width: 150,
         filter: "agTextColumnFilter",
+        sort: "desc",
+        valueFormatter: (p: ValueFormatterParams) =>
+          p.value ? formatDisplayDate(p.value) : "",
+        comparator: (a: string, b: string) => a.localeCompare(b),
       },
       {
         headerName: "Time In",
         field: "timeIn",
-        width: 100,
+        width: 105,
         filter: "agTextColumnFilter",
       },
       {
         headerName: "Time Out",
         field: "timeOut",
-        width: 100,
+        width: 105,
         filter: "agTextColumnFilter",
+      },
+      {
+        headerName: "Duration",
+        field: "durationMin",
+        width: 100,
+        filter: "agNumberColumnFilter",
+        valueFormatter: (p: ValueFormatterParams) =>
+          p.value != null ? `${p.value} min` : "",
+        type: "numericColumn",
       },
     ],
     [],
@@ -293,17 +469,16 @@ export default function ProfMyConsultations() {
     [],
   );
 
-  const onGridReady = useCallback((_params: GridReadyEvent) => {
-    // Grid is ready — could auto-size columns here if desired
-  }, []);
+  const onGridReady = useCallback((_params: GridReadyEvent) => {}, []);
 
   const rowSelection = useMemo<RowSelectionOptions>(
-    () => ({
-      mode: "singleRow",
-      checkboxes: false,
-    }),
+    () => ({ mode: "singleRow", checkboxes: false }),
     [],
   );
+
+  const onRowClicked = useCallback((e: RowClickedEvent<ConsultationRow>) => {
+    if (e.data) setSelectedRow(e.data);
+  }, []);
 
   const handleGenerateReport = () => {
     alert(
@@ -349,10 +524,6 @@ export default function ProfMyConsultations() {
               })}
             </p>
           </div>
-          <button className="btn-report" onClick={handleGenerateReport}>
-            <Download size={15} aria-hidden="true" />
-            Generate Report
-          </button>
         </div>
 
         {/* Stat cards */}
@@ -360,17 +531,20 @@ export default function ProfMyConsultations() {
           <StatCard
             icon={<CalendarCheck size={20} />}
             label="Consultations Today"
-            value={0}
+            value={countToday}
+            variant="secondary"
           />
           <StatCard
             icon={<CalendarDays size={20} />}
             label="Consultations This Week"
-            value={0}
+            value={countWeek}
+            variant="secondary"
           />
           <StatCard
             icon={<Users size={20} />}
             label="Students Consulted"
             value={totalStudents}
+            variant="primary"
           />
         </div>
 
@@ -422,6 +596,11 @@ export default function ProfMyConsultations() {
               />
             </div>
           </div>
+
+          <button className="btn-report" onClick={handleGenerateReport}>
+            <Download size={15} aria-hidden="true" />
+            Generate Report
+          </button>
         </div>
 
         {/* AG Grid */}
@@ -437,12 +616,15 @@ export default function ProfMyConsultations() {
             paginationPageSize={15}
             paginationPageSizeSelector={[10, 15, 25, 50]}
             rowSelection={rowSelection}
+            onRowClicked={onRowClicked}
             suppressMenuHide={true}
+            tooltipShowDelay={300}
           />
         </div>
-
-
       </main>
+
+      {/* ── Detail panel ───────────────────────────────────────────────────── */}
+      <DetailPanel row={selectedRow} onClose={() => setSelectedRow(null)} />
     </div>
   );
 }
