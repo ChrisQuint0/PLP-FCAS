@@ -1,13 +1,16 @@
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../contexts/ToastContext";
 import "./ModuleSelection.css";
 
 import plpLogo from "../assets/plp_logo.png";
 import ccsLogo from "../assets/ccs_logo.png";
+import ProfAuthModal from "../components/ProfAuthModal";
 
 export default function ModuleSelection() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const [isProfAuthOpen, setIsProfAuthOpen] = useState(false);
 
   return (
     <div className="module-container">
@@ -61,7 +64,7 @@ export default function ModuleSelection() {
           {/* PROFESSOR CARD */}
           <div
             className="module-card"
-            onClick={() => navigate("/prof/consultations")}
+            onClick={() => setIsProfAuthOpen(true)}
           >
             <div className="icon-wrapper">
               {/* Professor Briefcase/Book SVG */}
@@ -121,6 +124,11 @@ export default function ModuleSelection() {
           </div>
         </div>
       </div>
+      
+      <ProfAuthModal
+        isOpen={isProfAuthOpen}
+        onClose={() => setIsProfAuthOpen(false)}
+      />
     </div>
   );
 }
