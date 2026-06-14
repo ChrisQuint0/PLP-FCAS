@@ -1,0 +1,339 @@
+/* ─── Reset / base ─────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Design tokens (PLP brand – forest green palette) ─────────────────────── */
+:root {
+  --brand-900: #0e3d22;
+  --brand-800: #1a6b3c;
+  --brand-700: #218c4f;
+  --brand-600: #27a85f;
+  --brand-200: #a7e6c0;
+  --brand-100: #d2f5e3;
+  --brand-50: #ecfdf5;
+
+  --neutral-900: #101828;
+  --neutral-700: #344054;
+  --neutral-500: #667085;
+  --neutral-300: #d0d5dd;
+  --neutral-200: #e4e7ec;
+  --neutral-100: #f2f4f7;
+  --neutral-50: #f9fafb;
+  --white: #ffffff;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-sm:
+    0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md:
+    0 4px 8px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.06);
+}
+
+/* ─── Page shell ───────────────────────────────────────────────────────────── */
+.page-wrapper {
+  height: 100vh;
+  background: var(--neutral-100);
+  display: flex;
+  flex-direction: column;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  color: var(--neutral-900);
+  overflow: hidden;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+.page-header {
+  background: var(--brand-800);
+  color: var(--white);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.btn-sign-out {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-sign-out:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ─── Main ─────────────────────────────────────────────────────────────────── */
+.page-main {
+  flex: 1;
+  padding: 20px 32px 24px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* ─── Welcome ──────────────────────────────────────────────────────────────── */
+.welcome-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.welcome-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--neutral-900);
+  letter-spacing: -0.02em;
+}
+
+.welcome-date {
+  font-size: 13px;
+  color: var(--neutral-500);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Stat cards ───────────────────────────────────────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--brand-800);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Filter toolbar ───────────────────────────────────────────────────────── */
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--white);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 320px;
+}
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--neutral-500);
+  white-space: nowrap;
+}
+
+.date-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--neutral-300);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--neutral-900);
+  background: var(--white);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.date-input:focus {
+  border-color: var(--brand-700);
+  box-shadow: 0 0 0 3px var(--brand-50);
+}
+
+.section-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.section-select {
+  appearance: none;
+  height: 36px;
+  padding: 0 32px 0 12px;
+  border: 1px solid var(--neutral-300);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--neutral-900);
+  background: var(--white);
+  cursor: pointer;
+  outline: none;
+  min-width: 160px;
+  transition: border-color 0.15s;
+}
+
+.section-select:focus {
+  border-color: var(--brand-700);
+  box-shadow: 0 0 0 3px var(--brand-50);
+}
+
+.select-chevron {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  color: var(--neutral-500);
+}
+
+/* ─── AG Grid container ────────────────────────────────────────────────────── */
+.grid-container {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--neutral-200);
+  box-shadow: var(--shadow-sm);
+  flex: 1;
+  min-height: 250px;
+}
+
+/* ─── Footer actions ───────────────────────────────────────────────────────── */
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-report {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--brand-800);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-report:hover {
+  background: var(--brand-700);
+}
+
+.btn-report:active {
+  transform: scale(0.98);
+}
+
+/* ─── AG Grid overrides (light mode polish) ────────────────────────────────── */
+
+/* Floating filter row – keep it compact */
+.ag-floating-filter-input {
+  height: 28px !important;
+  font-size: 12px !important;
+}
+
+/* Pagination bar */
+.ag-paging-panel {
+  border-top: 1px solid var(--neutral-200) !important;
+  font-size: 12px !important;
+  color: var(--neutral-700) !important;
+  padding: 0 16px !important;
+  height: 44px !important;
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .page-main {
+    padding: 20px 16px 32px;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .date-range {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+}

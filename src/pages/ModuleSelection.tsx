@@ -61,7 +61,7 @@ export default function ModuleSelection() {
           {/* PROFESSOR CARD */}
           <div
             className="module-card"
-            onClick={() => showToast("Professor Dashboard coming soon!", "info")}
+            onClick={() => navigate("/prof/consultations")}
           >
             <div className="icon-wrapper">
               {/* Professor Briefcase/Book SVG */}

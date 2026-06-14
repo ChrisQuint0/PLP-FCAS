@@ -7,6 +7,7 @@ import {
 import ModuleSelection from "./pages/ModuleSelection";
 import MainPage from "./pages/MainPage";
 import { ToastProvider } from "./contexts/ToastContext";
+import ProfMyConsultations from "./pages/ProfMyConsultations";
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
 
           {/* Catch-all route to redirect back to home if they type a bad URL */}
           <Route path="*" element={<Navigate to="/" replace />} />
+
+          <Route path="/prof/consultations" element={<ProfMyConsultations />} />
         </Routes>
       </Router>
     </ToastProvider>
