@@ -8,6 +8,7 @@ import ModuleSelection from "./pages/ModuleSelection";
 import MainPage from "./pages/MainPage";
 import { ToastProvider } from "./contexts/ToastContext";
 import ProfMyConsultations from "./pages/ProfMyConsultations";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
 
           <Route path="/prof/consultations" element={<ProfMyConsultations />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </Router>
     </ToastProvider>

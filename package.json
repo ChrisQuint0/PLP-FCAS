@@ -14,8 +14,10 @@
     "@tauri-apps/plugin-opener": "^2",
     "ag-grid-community": "^35.3.1",
     "ag-grid-react": "^35.3.1",
+    "chart.js": "^4.5.1",
     "lucide-react": "^1.18.0",
     "react": "^19.1.0",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.17.0",
     "signature_pad": "^5.1.3"

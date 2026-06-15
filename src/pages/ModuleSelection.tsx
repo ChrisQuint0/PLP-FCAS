@@ -32,7 +32,7 @@ export default function ModuleSelection() {
           {/* ADMIN CARD */}
           <div
             className="module-card"
-            onClick={() => showToast("Admin Dashboard coming soon!", "info")}
+            onClick={() => navigate("/admin/dashboard")}
           >
             <div className="icon-wrapper">
               {/* Admin Shield SVG */}

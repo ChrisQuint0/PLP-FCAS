@@ -1,0 +1,471 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ── Color tokens — matched to My Consultations Tauri app ── */
+:root {
+  /* Sidebar — same deep forest green as the Tauri top bar */
+  --sidebar-bg: #1a5c38;
+  --sidebar-active: #145230;
+  --sidebar-hover: rgba(0, 0, 0, 0.12);
+  --sidebar-text: #e8f5ee;
+  --sidebar-text-dim: #9fcfb1;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+
+  /* Main content area */
+  --main-bg: #f0f4f1; /* Very light gray-green, matches the app body */
+  --card-bg: #ffffff;
+  --card-border: #deeae2;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  /* Accent — the same "Generate Report" / header green */
+  --accent-green: #1e7a45;
+  --accent-green-hover: #155e34;
+
+  /* Stat card backgrounds — mirrors the "Students Consulted" dark card
+     and the lighter mint cards in My Consultations */
+  --stat-dark: #1e7a45; /* strong green (like Students Consulted card) */
+  --stat-light-bg: #eaf6ef; /* mint tint (like Consultations Today card) */
+  --stat-light-text: #1a5c38;
+
+  /* Typography */
+  --title-color: #1a1a1a;
+  --text-primary: #1a2e20;
+  --text-secondary: #4d6e57;
+  --text-muted: #85a890;
+  --border-color: #deeae2;
+}
+
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+  background-color: var(--main-bg);
+  color: var(--text-primary);
+}
+
+/* ── Sidebar ── */
+.admin-sidebar {
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease-in-out;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.12);
+  z-index: 50;
+  height: 100%;
+}
+
+.sidebar-open .admin-sidebar {
+  width: 240px;
+}
+.sidebar-closed .admin-sidebar {
+  width: 68px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 64px;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.sidebar-closed .sidebar-header {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar-brand-trigger {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s;
+}
+
+.sidebar-closed .sidebar-brand-trigger:hover {
+  background-color: var(--sidebar-hover);
+}
+
+.sidebar-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.sidebar-menu-icon {
+  color: var(--sidebar-text);
+}
+
+.sidebar-user-info {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.user-role {
+  font-size: 11px;
+  color: var(--sidebar-text-dim);
+  margin-top: 1px;
+}
+
+.sidebar-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: var(--sidebar-hover);
+  color: #ffffff;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 3px;
+}
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  padding: 9px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.nav-item:hover {
+  background-color: var(--sidebar-hover);
+  color: #ffffff;
+}
+
+.nav-item.active {
+  background-color: var(--sidebar-active);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sidebar-closed .nav-item {
+  justify-content: center;
+  padding: 9px 0;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  flex-shrink: 0;
+}
+
+.nav-label {
+  margin-left: 10px;
+  white-space: nowrap;
+}
+.sidebar-closed .nav-label {
+  display: none;
+}
+
+.nav-divider {
+  height: 1px;
+  background-color: var(--sidebar-border);
+  margin: 8px 0;
+}
+
+.sidebar-footer {
+  padding: 10px 10px;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.signout-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text-dim);
+  padding: 9px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.signout-btn:hover {
+  background-color: var(--sidebar-hover);
+  color: #ffffff;
+}
+
+.sidebar-closed .signout-btn {
+  justify-content: center;
+  padding: 9px 0;
+}
+
+.signout-text {
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+/* ── Main Area ── */
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--main-bg);
+}
+
+.admin-topbar {
+  padding: 24px 28px 0 28px;
+}
+
+.dashboard-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--title-color);
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 18px 28px 24px 28px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+/* ── Stat Cards — mirrors My Consultations style ── */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+/* Default: light mint card (like "Consultations Today") */
+.admin-stat-card {
+  background-color: var(--stat-light-bg);
+  border: 1px solid #c8e6d4;
+  border-radius: 10px;
+  padding: 20px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--stat-light-text);
+  box-shadow: var(--card-shadow);
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+/* Last card: dark green (like "Students Consulted") */
+.admin-stat-card:last-child {
+  background-color: var(--stat-dark);
+  border-color: var(--stat-dark);
+  color: #ffffff;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.admin-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.admin-stat-icon-wrapper {
+  opacity: 0.22;
+}
+
+/* ── Year Label ── */
+.year-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 4px 0;
+}
+
+.year-nav-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.year-nav-btn:hover {
+  background: var(--stat-light-bg);
+  color: var(--accent-green);
+  border-color: #c8e6d4;
+}
+
+.year-text {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--title-color);
+  letter-spacing: 0.5px;
+  background: var(--card-bg);
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.year-highlight {
+  color: var(--accent-green);
+  font-size: 15px;
+}
+
+/* ── Charts ── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  min-height: 340px;
+}
+
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.chart-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 20px 22px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chart-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 14px 0;
+  text-align: center;
+}
+
+.doughnut-container {
+  flex: 1;
+  position: relative;
+  min-height: 230px;
+}
+
+.area-container {
+  flex: 1;
+  position: relative;
+  min-height: 230px;
+}
+
+/* ── Generate Report Button ── */
+.actions-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.generate-report-btn {
+  background-color: var(--accent-green);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    transform 0.1s;
+  box-shadow: 0 2px 6px rgba(30, 122, 69, 0.3);
+}
+
+.generate-report-btn:hover {
+  background-color: var(--accent-green-hover);
+}
+.generate-report-btn:active {
+  transform: translateY(1px);
+}
