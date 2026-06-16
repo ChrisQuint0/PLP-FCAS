@@ -34,6 +34,7 @@ import { Doughnut, Line } from "react-chartjs-2";
 
 import "./AdminDashboard.css";
 import plpLogo from "../assets/plp_logo.png";
+import AdminConsultations from "./AdminConsultations";
 
 // Register Chart.js components
 ChartJS.register(
@@ -53,6 +54,7 @@ export default function AdminDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [logoHover, setLogoHover] = useState(false);
   const [currentYear, setCurrentYear] = useState(2025);
+  const [currentView, setCurrentView] = useState("Dashboard");
 
   // Stats data
   const stats = [
@@ -247,42 +249,57 @@ export default function AdminDashboard() {
             icon={<LayoutDashboard size={18} />}
             label="Dashboard"
             isSidebarOpen={isSidebarOpen}
-            active
+            active={currentView === "Dashboard"}
+            onClick={() => setCurrentView("Dashboard")}
           />
           <NavItem
             icon={<FileText size={18} />}
             label="Consultations"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Consultations"}
+            onClick={() => setCurrentView("Consultations")}
           />
           <NavItem
             icon={<GraduationCap size={18} />}
             label="Students"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Students"}
+            onClick={() => setCurrentView("Students")}
           />
           <NavItem
             icon={<UserCheck size={18} />}
             label="Professors"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Professors"}
+            onClick={() => setCurrentView("Professors")}
           />
           <NavItem
             icon={<Users size={18} />}
             label="Admins"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Admins"}
+            onClick={() => setCurrentView("Admins")}
           />
           <NavItem
             icon={<MessageSquare size={18} />}
             label="Reasons"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Reasons"}
+            onClick={() => setCurrentView("Reasons")}
           />
           <NavItem
             icon={<Building2 size={18} />}
             label="Sections"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Sections"}
+            onClick={() => setCurrentView("Sections")}
           />
           <NavItem
             icon={<Settings size={18} />}
             label="Settings"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Settings"}
+            onClick={() => setCurrentView("Settings")}
           />
 
           <div className="nav-divider" />
@@ -291,11 +308,15 @@ export default function AdminDashboard() {
             icon={<Archive size={18} />}
             label="Archived Students"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Archived Students"}
+            onClick={() => setCurrentView("Archived Students")}
           />
           <NavItem
             icon={<ArchiveRestore size={18} />}
             label="Archived Professors"
             isSidebarOpen={isSidebarOpen}
+            active={currentView === "Archived Professors"}
+            onClick={() => setCurrentView("Archived Professors")}
           />
         </nav>
 
@@ -309,68 +330,82 @@ export default function AdminDashboard() {
 
       {/* ── Main Content ── */}
       <main className="admin-main">
-        <header className="admin-topbar">
-          <h1 className="dashboard-title">DASHBOARD</h1>
-        </header>
+        {currentView === "Dashboard" && (
+          <>
+            <header className="admin-topbar">
+              <h1 className="dashboard-title">DASHBOARD</h1>
+            </header>
 
-        <div className="admin-content">
-          {/* Stat Cards */}
-          <div className="admin-stats-grid">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="admin-stat-card">
-                <div className="admin-stat-info">
-                  <span className="admin-stat-value">{stat.value}</span>
-                  <span className="admin-stat-label">{stat.label}</span>
+            <div className="admin-content">
+              {/* Stat Cards */}
+              <div className="admin-stats-grid">
+                {stats.map((stat, idx) => (
+                  <div key={idx} className="admin-stat-card">
+                    <div className="admin-stat-info">
+                      <span className="admin-stat-value">{stat.value}</span>
+                      <span className="admin-stat-label">{stat.label}</span>
+                    </div>
+                    <div className="admin-stat-icon-wrapper">{stat.icon}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="year-selector">
+                <button 
+                  className="year-nav-btn" 
+                  onClick={() => setCurrentYear(y => y - 1)}
+                  aria-label="Previous Year"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <span className="year-text">
+                  YEAR: <span className="year-highlight">{currentYear}</span>
+                </span>
+                <button 
+                  className="year-nav-btn" 
+                  onClick={() => setCurrentYear(y => y + 1)}
+                  aria-label="Next Year"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+
+              {/* Charts Section */}
+              <div className="charts-grid">
+                <div className="chart-card">
+                  <h2 className="chart-title">Consultation Reasons - {currentYear}</h2>
+                  <div className="doughnut-container">
+                    <Doughnut data={doughnutData} options={doughnutOptions} />
+                  </div>
                 </div>
-                <div className="admin-stat-icon-wrapper">{stat.icon}</div>
+
+                <div className="chart-card">
+                  <h2 className="chart-title">Consultations ({currentYear})</h2>
+                  <div className="area-container">
+                    <Line data={areaData} options={areaOptions} />
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="year-selector">
-            <button 
-              className="year-nav-btn" 
-              onClick={() => setCurrentYear(y => y - 1)}
-              aria-label="Previous Year"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <span className="year-text">
-              YEAR: <span className="year-highlight">{currentYear}</span>
-            </span>
-            <button 
-              className="year-nav-btn" 
-              onClick={() => setCurrentYear(y => y + 1)}
-              aria-label="Next Year"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-
-          {/* Charts Section */}
-          <div className="charts-grid">
-            <div className="chart-card">
-              <h2 className="chart-title">Consultation Reasons - {currentYear}</h2>
-              <div className="doughnut-container">
-                <Doughnut data={doughnutData} options={doughnutOptions} />
+              <div className="actions-row">
+                <button className="generate-report-btn">
+                  <Download size={16} />
+                  GENERATE REPORT
+                </button>
               </div>
             </div>
+          </>
+        )}
 
-            <div className="chart-card">
-              <h2 className="chart-title">Consultations ({currentYear})</h2>
-              <div className="area-container">
-                <Line data={areaData} options={areaOptions} />
-              </div>
-            </div>
+        {currentView === "Consultations" && <AdminConsultations />}
+        
+        {/* Placeholder for other views */}
+        {currentView !== "Dashboard" && currentView !== "Consultations" && (
+          <div style={{ padding: "24px" }}>
+            <h2>{currentView}</h2>
+            <p>This module is under construction.</p>
           </div>
-
-          <div className="actions-row">
-            <button className="generate-report-btn">
-              <Download size={16} />
-              GENERATE REPORT
-            </button>
-          </div>
-        </div>
+        )}
       </main>
     </div>
   );
@@ -382,16 +417,19 @@ function NavItem({
   label,
   active = false,
   isSidebarOpen,
+  onClick,
 }: {
   icon: React.ReactNode;
   label: string;
   active?: boolean;
   isSidebarOpen: boolean;
+  onClick?: () => void;
 }) {
   return (
     <button
       className={`nav-item ${active ? "active" : ""}`}
       title={!isSidebarOpen ? label : undefined}
+      onClick={onClick}
     >
       <span className="nav-icon">{icon}</span>
       {isSidebarOpen && <span className="nav-label">{label}</span>}

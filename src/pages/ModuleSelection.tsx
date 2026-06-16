@@ -6,11 +6,13 @@ import "./ModuleSelection.css";
 import plpLogo from "../assets/plp_logo.png";
 import ccsLogo from "../assets/ccs_logo.png";
 import ProfAuthModal from "../components/ProfAuthModal";
+import AdminAuthModal from "../components/AdminAuthModal";
 
 export default function ModuleSelection() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [isProfAuthOpen, setIsProfAuthOpen] = useState(false);
+  const [isAdminAuthOpen, setIsAdminAuthOpen] = useState(false);
 
   return (
     <div className="module-container">
@@ -32,7 +34,7 @@ export default function ModuleSelection() {
           {/* ADMIN CARD */}
           <div
             className="module-card"
-            onClick={() => navigate("/admin/dashboard")}
+            onClick={() => setIsAdminAuthOpen(true)}
           >
             <div className="icon-wrapper">
               {/* Admin Shield SVG */}
@@ -128,6 +130,10 @@ export default function ModuleSelection() {
       <ProfAuthModal
         isOpen={isProfAuthOpen}
         onClose={() => setIsProfAuthOpen(false)}
+      />
+      <AdminAuthModal
+        isOpen={isAdminAuthOpen}
+        onClose={() => setIsAdminAuthOpen(false)}
       />
     </div>
   );

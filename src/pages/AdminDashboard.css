@@ -266,15 +266,22 @@
 }
 
 .admin-topbar {
-  padding: 24px 28px 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1a6b3c;
+  padding: 16px 24px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .dashboard-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--title-color);
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
   margin: 0;
-  letter-spacing: 0.3px;
+  border-bottom: 3px solid white;
+  padding-bottom: 4px;
 }
 
 .admin-content {
