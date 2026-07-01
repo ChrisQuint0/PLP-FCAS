@@ -35,6 +35,7 @@ import { Doughnut, Line } from "react-chartjs-2";
 import "./AdminDashboard.css";
 import plpLogo from "../assets/plp_logo.png";
 import AdminConsultations from "./AdminConsultations";
+import AdminStudents from "./AdminStudents";
 
 // Register Chart.js components
 ChartJS.register(
@@ -351,9 +352,9 @@ export default function AdminDashboard() {
               </div>
 
               <div className="year-selector">
-                <button 
-                  className="year-nav-btn" 
-                  onClick={() => setCurrentYear(y => y - 1)}
+                <button
+                  className="year-nav-btn"
+                  onClick={() => setCurrentYear((y) => y - 1)}
                   aria-label="Previous Year"
                 >
                   <ChevronLeft size={20} />
@@ -361,9 +362,9 @@ export default function AdminDashboard() {
                 <span className="year-text">
                   YEAR: <span className="year-highlight">{currentYear}</span>
                 </span>
-                <button 
-                  className="year-nav-btn" 
-                  onClick={() => setCurrentYear(y => y + 1)}
+                <button
+                  className="year-nav-btn"
+                  onClick={() => setCurrentYear((y) => y + 1)}
                   aria-label="Next Year"
                 >
                   <ChevronRight size={20} />
@@ -373,7 +374,9 @@ export default function AdminDashboard() {
               {/* Charts Section */}
               <div className="charts-grid">
                 <div className="chart-card">
-                  <h2 className="chart-title">Consultation Reasons - {currentYear}</h2>
+                  <h2 className="chart-title">
+                    Consultation Reasons - {currentYear}
+                  </h2>
                   <div className="doughnut-container">
                     <Doughnut data={doughnutData} options={doughnutOptions} />
                   </div>
@@ -398,9 +401,10 @@ export default function AdminDashboard() {
         )}
 
         {currentView === "Consultations" && <AdminConsultations />}
-        
+        {currentView === "Students" && <AdminStudents />}
+
         {/* Placeholder for other views */}
-        {currentView !== "Dashboard" && currentView !== "Consultations" && (
+        {currentView !== "Dashboard" && currentView !== "Consultations" && currentView !== "Students" && (
           <div style={{ padding: "24px" }}>
             <h2>{currentView}</h2>
             <p>This module is under construction.</p>
