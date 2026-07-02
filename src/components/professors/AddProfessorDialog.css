@@ -1,0 +1,164 @@
+.add-prof-dialog-content {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 51;
+  background-color: #ffffff;
+  width: 90vw;
+  max-width: 500px;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #deeae2;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Global class to ensure overlay works if Tailwind fails */
+.fixed.inset-0.z-50 {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Header Styling */
+.add-prof-dialog-content h2 {
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1.5rem;
+}
+
+/* Fallback for Radix UI Close Button */
+.radix-dialog-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  transition: background-color 0.2s;
+}
+
+.radix-dialog-close:hover {
+  background-color: #e5e7eb;
+}
+
+.radix-sr-only {
+  display: none;
+}
+
+.add-prof-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.add-prof-error {
+  background-color: #fef2f2;
+  color: #ef4444;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  border: 1px solid #fecaca;
+}
+
+.add-prof-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.add-prof-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.add-prof-full {
+  grid-column: span 2;
+}
+
+.add-prof-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.add-prof-req {
+  color: #ef4444;
+}
+
+.add-prof-opt {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.add-prof-group input,
+.add-prof-group select {
+  height: 40px;
+  padding: 0 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.add-prof-group input:focus,
+.add-prof-group select:focus {
+  border-color: #1e7a45;
+  box-shadow: 0 0 0 2px rgba(30, 122, 69, 0.1);
+}
+
+.add-prof-footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.add-prof-cancel {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-prof-cancel:hover {
+  background-color: #f9fafb;
+}
+
+.add-prof-submit {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #1e7a45;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-prof-submit:hover {
+  background-color: #166534;
+}

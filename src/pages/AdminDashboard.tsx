@@ -36,6 +36,7 @@ import "./AdminDashboard.css";
 import plpLogo from "../assets/plp_logo.png";
 import AdminConsultations from "./AdminConsultations";
 import AdminStudents from "./AdminStudents";
+import AdminProfessors from "./AdminProfessors";
 
 // Register Chart.js components
 ChartJS.register(
@@ -402,9 +403,10 @@ export default function AdminDashboard() {
 
         {currentView === "Consultations" && <AdminConsultations />}
         {currentView === "Students" && <AdminStudents />}
+        {currentView === "Professors" && <AdminProfessors />}
 
         {/* Placeholder for other views */}
-        {currentView !== "Dashboard" && currentView !== "Consultations" && currentView !== "Students" && (
+        {currentView !== "Dashboard" && currentView !== "Consultations" && currentView !== "Students" && currentView !== "Professors" && (
           <div style={{ padding: "24px" }}>
             <h2>{currentView}</h2>
             <p>This module is under construction.</p>
